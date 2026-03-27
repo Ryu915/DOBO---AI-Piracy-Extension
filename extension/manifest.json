@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "DOBO - AI Data Transparency",
+  "version": "1.1",
+  "permissions": [
+    "webRequest",
+    "storage",
+    "activeTab",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
