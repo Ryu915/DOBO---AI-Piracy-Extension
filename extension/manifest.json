@@ -9,6 +9,18 @@
     "scripting",
     "tabs"
   ],
+  "icons": {
+    "16": "16x16.png",
+    "48": "48x48.png",
+    "128": "128x128.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
