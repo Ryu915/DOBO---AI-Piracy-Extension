@@ -1,98 +1,70 @@
 const statsDiv = document.getElementById("stats");
 
-// Helper functions for categorization
+// Categorization
 const categoryRules = {
-  AI_SERVICE: ["openai", "anthropic", "huggingface"],
-  TRACKING: ["analytics", "segment", "mixpanel"],
-  AD_NETWORK: ["ads", "doubleclick"],
-  CDN: ["cdn", "cloudflare", "akamai"],
-  SOCIAL_MEDIA: ["facebook", "twitter", "instagram"],
-  STATIC_ASSETS: ["fonts", "gstatic", "cdnjs"],
-  PAYMENT: ["stripe", "paypal"],
-  AUTH_PROVIDER: ["auth", "login", "okta"],
-  CLOUD_INFRA: ["amazonaws", "azure"]
+  AI: ["openai", "anthropic"],
+  TRACKING: ["analytics", "segment"],
+  ADS: ["ads", "doubleclick"],
+  CDN: ["cloudflare", "cdn"],
+  SOCIAL: ["facebook", "twitter"],
+  PAYMENT: ["stripe", "paypal"]
 };
 
-function categorizeDomain(domain) {
-  const lowerDomain = domain.toLowerCase();
+function categorize(domain) {
+  domain = domain.toLowerCase();
 
-  for (const [category, keywords] of Object.entries(categoryRules)) {
-    if (keywords.some((k) => lowerDomain.includes(k))) {
-      return category;
+  for (let key in categoryRules) {
+    if (categoryRules[key].some(k => domain.includes(k))) {
+      return key;
     }
   }
-
   return "OTHER";
 }
 
-function getCategoryColor(category) {
-  switch (category) {
-    case "AI_SERVICE": return "#ff6b6b";
-    case "TRACKING": return "#4ecdc4";
-    case "AD_NETWORK": return "#45b7d1";
-    case "CDN": return "#96ceb4";
-    case "SOCIAL_MEDIA": return "#ff9f43";
-    case "STATIC_ASSETS": return "#a29bfe";
-    case "PAYMENT": return "#00cec9";
-    case "AUTH_PROVIDER": return "#fdcb6e";
-    case "CLOUD_INFRA": return "#00b894";
-    default: return "#feca57";
-  }
+function createCard(category, count) {
+  let div = document.createElement("div");
+  div.className = "card";
+
+  div.innerHTML = `
+    <div class="category-name">${category}</div>
+    <div class="count">${count}</div>
+    <div class="label">requests</div>
+  `;
+
+  return div;
 }
 
-// Function to refresh UI from storage
 function refreshUI() {
   chrome.storage.local.get(["requests"], (data) => {
-    console.log("📦 Storage data retrieved:", data);
-
-    const requests = data.requests || [];
-
+    let requests = data.requests || [];
     statsDiv.innerHTML = "";
 
-    // -------- DOMAIN CATEGORIZATION SUMMARY --------
-    const categoryCount = {};
-
-    requests.forEach((r) => {
-      const cat = r.category || "OTHER";
-      if (!categoryCount[cat]) {
-        categoryCount[cat] = 0;
-      }
-      categoryCount[cat]++;
-    });
-
-    if (Object.keys(categoryCount).length > 0) {
-
-      const catTitle = document.createElement("h3");
-      catTitle.innerText = "📂 Network Categories";
-      statsDiv.appendChild(catTitle);
-
-      Object.entries(categoryCount)
-        .sort((a, b) => b[1] - a[1])
-        .forEach(([cat, count]) => {
-
-          const p = document.createElement("p");
-          const color = getCategoryColor(cat);
-          p.innerHTML = `<span style="color: ${color}; font-weight: bold;">${cat}</span> — ${count} requests`;
-
-          statsDiv.appendChild(p);
-
-        });
-
-    } else {
-      statsDiv.innerHTML = "<p style='color: #888;'>⏳ No activity yet. Browse some websites to see data...</p>";
+    if (requests.length === 0) {
+      statsDiv.innerHTML = `<div class="empty">No activity yet</div>`;
+      return;
     }
 
-    console.log("✅ UI refreshed.");
+    let map = {};
+
+    requests.forEach(r => {
+      let cat = categorize(r.domain);
+      map[cat] = (map[cat] || 0) + 1;
+    });
+
+    let title = document.createElement("div");
+    title.className = "section-title";
+    title.innerText = "Activity Overview";
+
+    statsDiv.appendChild(title);
+
+    Object.entries(map)
+      .sort((a, b) => b[1] - a[1])
+      .forEach(([cat, count]) => {
+        statsDiv.appendChild(createCard(cat, count));
+      });
   });
 }
 
-// Initial load
 refreshUI();
 
-// Listen for storage changes and refresh UI
-chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === "local") {
-    console.log("💾 Storage changed, refreshing UI...", changes);
-    refreshUI();
-  }
-});
+chrome.storage.onChanged.addListener(() => refreshUI());
