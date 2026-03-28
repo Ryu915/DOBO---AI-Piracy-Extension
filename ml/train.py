@@ -54,10 +54,26 @@ data = [
     ("cdn.shopify.com", 0),
     ("static.cloudflare.com", 0),
     ("images.unsplash.com", 0),
+    ("developer.mozilla.org", 0),
+    ("docs.python.org", 0),
+    ("stackoverflow.com", 0),
+    ("news.ycombinator.com", 0),
+    ("medium.com", 0),
+    ("bbc.com", 0),
+    ("nytimes.com", 0),
+    ("api.github.com", 0),
+    ("fonts.googleapis.com", 0),
+    ("cdnjs.cloudflare.com", 0),
+    ("assets.vercel.com", 0),
+    ("platform.openai.com", 0),
+    ("drive.google.com", 0),
+    ("mail.google.com", 0),
+    ("maps.google.com", 0),
+    ("login.microsoftonline.com", 0),
+    ("office.com", 0),
+    ("apple.com", 0),
+    ("support.apple.com", 0),
 
-<<<<<<< HEAD
-    # SUSPICIOUS
-=======
     # NEW SAFE
     ("netflix.com", 0),
     ("linkedin.com", 0),
@@ -99,7 +115,6 @@ data = [
     ("chat.openai.com", 0),
 
     # SUSPICIOUS (tracking / ads / analytics)
->>>>>>> 536cb67 (increased accuracy)
     ("pixel.onaudience.com", 1),
     ("ads.doubleclick.net", 1),
     ("track.segment.io", 1),
@@ -107,8 +122,6 @@ data = [
     ("tracking.facebook.com", 1),
     ("metrics.apple.com", 1),
     ("adservice.google.com", 1),
-<<<<<<< HEAD
-=======
     ("stats.g.doubleclick.net", 1),
     ("ad.doubleclick.net", 1),
     ("pagead2.googlesyndication.com", 1),
@@ -176,7 +189,6 @@ data = [
     ("track.smaato.net", 1),
     ("ads.inmobi.com", 1),
     ("track.inmobi.com", 1),
->>>>>>> 536cb67 (increased accuracy)
 ]
 
 # BUILD FEATURE MATRIX
