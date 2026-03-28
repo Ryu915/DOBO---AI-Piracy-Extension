@@ -61,7 +61,7 @@ function addRequestToUI(data) {
     </div>
 
     <div style="font-size:10px; color:#aaa;">
-      ${data.time}
+      Category: ${data.category || "OTHER"} | ${data.time}
     </div>
   `;
 

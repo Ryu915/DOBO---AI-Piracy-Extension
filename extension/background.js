@@ -1,5 +1,13 @@
-
 let mlCache = {};
+
+// ONBOARDING
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "install") {
+    chrome.tabs.create({
+      url: chrome.runtime.getURL("onboarding.html")
+    });
+  }
+});
 
 async function checkML(domain) {
   try {
@@ -21,7 +29,6 @@ async function checkML(domain) {
 
 let lastSeen = {};
 
-
 function getDomain(url) {
   try {
     return new URL(url).hostname;
@@ -31,8 +38,8 @@ function getDomain(url) {
 }
 
 function getRootDomain(hostname) {
-  const parts = hostname.split('.');
-  return parts.length <= 2 ? hostname : parts.slice(-2).join('.');
+  const parts = hostname.split(".");
+  return parts.length <= 2 ? hostname : parts.slice(-2).join(".");
 }
 
 async function getCurrentTab() {
@@ -50,16 +57,39 @@ function shouldLog(domain) {
 }
 
 // RULE BASED
-
 const suspiciousKeywords = ["track", "ads", "analytics", "pixel"];
 
 function classifyRisk(domain) {
-  if (suspiciousKeywords.some(k => domain.includes(k))) {
+  if (suspiciousKeywords.some((k) => domain.includes(k))) {
     return "SUSPICIOUS";
   }
   return "NORMAL";
 }
 
+// NEW: DOMAIN CATEGORY
+const categoryRules = {
+  AI_SERVICE: ["openai", "anthropic", "huggingface"],
+  TRACKING: ["analytics", "segment", "mixpanel"],
+  AD_NETWORK: ["ads", "doubleclick"],
+  CDN: ["cdn", "cloudflare", "akamai"],
+  SOCIAL_MEDIA: ["facebook", "twitter", "instagram"],
+  STATIC_ASSETS: ["fonts", "gstatic", "cdnjs"],
+  PAYMENT: ["stripe", "paypal"],
+  AUTH_PROVIDER: ["auth", "login", "okta"],
+  CLOUD_INFRA: ["amazonaws", "azure"]
+};
+
+function categorizeDomain(domain) {
+  const lowerDomain = domain.toLowerCase();
+
+  for (const [category, keywords] of Object.entries(categoryRules)) {
+    if (keywords.some((k) => lowerDomain.includes(k))) {
+      return category;
+    }
+  }
+
+  return "OTHER";
+}
 
 function storeRequest(entry) {
   chrome.storage.local.get(["requests", "domainStats"], (data) => {
@@ -68,15 +98,38 @@ function storeRequest(entry) {
 
     requests.push(entry);
 
-    if (!domainStats[entry.domain]) {
-      domainStats[entry.domain] = {
+    // -------- BEHAVIOR PROFILING --------
+    if (!domainStats[entry.rootDomain]) {
+      domainStats[entry.rootDomain] = {
         count: 0,
-        lastAccess: entry.time
+        thirdParty: 0,
+        suspicious: 0,
+        domains: {}
       };
     }
 
-    domainStats[entry.domain].count++;
-    domainStats[entry.domain].lastAccess = entry.time;
+    domainStats[entry.rootDomain].count++;
+
+    if (entry.status === "THIRD_PARTY") {
+      domainStats[entry.rootDomain].thirdParty++;
+    }
+
+    if (entry.risk === "SUSPICIOUS") {
+      domainStats[entry.rootDomain].suspicious++;
+    }
+
+    domainStats[entry.rootDomain].domains[entry.domain] = true;
+
+    // -------- ENDPOINT FREQUENCY --------
+    if (!domainStats.endpoints) {
+      domainStats.endpoints = {};
+    }
+
+    if (!domainStats.endpoints[entry.domain]) {
+      domainStats.endpoints[entry.domain] = 0;
+    }
+
+    domainStats.endpoints[entry.domain]++;
 
     chrome.storage.local.set({ requests, domainStats });
   });
@@ -108,7 +161,6 @@ chrome.webRequest.onBeforeRequest.addListener(
 
     let risk = classifyRisk(requestDomain);
 
-   
     let mlResult;
 
     if (mlCache[requestRoot]) {
@@ -118,14 +170,12 @@ chrome.webRequest.onBeforeRequest.addListener(
       mlCache[requestRoot] = mlResult;
     }
 
-    console.log("ML RESULT:", requestRoot, mlResult);
-
-
     const entry = {
       domain: requestDomain,
       rootDomain: requestRoot,
       status,
       risk,
+      category: categorizeDomain(requestDomain), // NEW
       mlRisk: mlResult?.suspicious ? "ML_SUSPICIOUS" : "ML_NORMAL",
       confidence: mlResult?.confidence || null,
       time: new Date().toLocaleTimeString()
