@@ -41,7 +41,7 @@ def extract_features(domain, freq=1, is_third_party=1):
         known_flag
     ]
 
-# DATASET (expand this later!)
+# DATASET 
 data = [
     # SAFE
     ("google.com", 0),
@@ -52,8 +52,27 @@ data = [
     ("cdn.shopify.com", 0),
     ("static.cloudflare.com", 0),
     ("images.unsplash.com", 0),
+    ("developer.mozilla.org", 0),
+    ("docs.python.org", 0),
+    ("stackoverflow.com", 0),
+    ("news.ycombinator.com", 0),
+    ("medium.com", 0),
+    ("bbc.com", 0),
+    ("nytimes.com", 0),
+    ("api.github.com", 0),
+    ("fonts.googleapis.com", 0),
+    ("cdnjs.cloudflare.com", 0),
+    ("assets.vercel.com", 0),
+    ("platform.openai.com", 0),
+    ("drive.google.com", 0),
+    ("mail.google.com", 0),
+    ("maps.google.com", 0),
+    ("login.microsoftonline.com", 0),
+    ("office.com", 0),
+    ("apple.com", 0),
+    ("support.apple.com", 0),
 
-    # SUSPICIOUS
+    # SUSPICIOUS (tracking / ads / analytics)
     ("pixel.onaudience.com", 1),
     ("ads.doubleclick.net", 1),
     ("track.segment.io", 1),
@@ -61,6 +80,32 @@ data = [
     ("tracking.facebook.com", 1),
     ("metrics.apple.com", 1),
     ("adservice.google.com", 1),
+    ("stats.g.doubleclick.net", 1),
+    ("ad.doubleclick.net", 1),
+    ("pagead2.googlesyndication.com", 1),
+    ("googleads.g.doubleclick.net", 1),
+    ("ads.yahoo.com", 1),
+    ("analytics.twitter.com", 1),
+    ("t.co", 1),
+    ("track.mailchimp.com", 1),
+    ("links.mailchimp.com", 1),
+    ("clicks.hubspot.com", 1),
+    ("track.hubspot.com", 1),
+    ("pixel.facebook.com", 1),
+    ("connect.facebook.net", 1),
+    ("ads.linkedin.com", 1),
+    ("px.ads.linkedin.com", 1),
+    ("tracking.snapchat.com", 1),
+    ("ads.snapchat.com", 1),
+    ("insights.hotjar.com", 1),
+    ("script.hotjar.com", 1),
+    ("bam.nr-data.net", 1),
+    ("js-agent.newrelic.com", 1),
+    ("logx.optimizely.com", 1),
+    ("events.mixpanel.com", 1),
+    ("api.mixpanel.com", 1),
+    ("trk.pinterest.com", 1),
+    ("ads.pinterest.com", 1),
 ]
 
 # BUILD FEATURE MATRIX
