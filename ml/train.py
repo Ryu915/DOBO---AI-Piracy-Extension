@@ -43,7 +43,6 @@ def extract_features(domain):
         int(tld in suspicious_tlds)
     ]
 
-# DATASET (expand this later!)
 data = [
     # SAFE
     ("google.com", 0),
