@@ -1,29 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Welcome to DOBO</title>
+<title>DOBO</title>
 
 <style>
 body{
-  font-family: Arial;
-  background:#0f0f0f;
-  color:white;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:#000;
+  color:#fff;
+  margin:0;
   padding:40px;
 }
 
-h1{
-  color:#00d4ff;
+/* Layout */
+.container{
+  max-width:1100px;
+  margin:auto;
 }
 
+/* Hero Section */
+.hero{
+  display:flex;
+  gap:40px;
+  align-items:center;
+  margin-bottom:40px;
+}
+
+.hero-text{
+  flex:1;
+}
+
+.hero-image{
+  flex:1;
+}
+
+.hero img{
+  width:100%;
+  border-radius:12px;
+  border:1px solid #222;
+}
+
+/* Title */
+h1{
+  font-size:32px;
+  margin-bottom:10px;
+}
+
+/* Subtitle */
+.subtitle{
+  color:#888;
+  font-size:15px;
+  margin-bottom:20px;
+}
+
+/* Paragraph */
+p{
+  color:#ccc;
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* Cards */
 .card{
-  background:#1a1a1a;
-  padding:20px;
-  border-radius:10px;
+  border:1px solid #222;
+  padding:18px;
+  border-radius:12px;
   margin-top:20px;
+  background:#0a0a0a;
+}
+
+h3{
+  margin-top:0;
+  font-size:16px;
+  margin-bottom:10px;
 }
 
 li{
   margin:8px 0;
+  color:#ccc;
+  font-size:14px;
+}
+
+/* Footer */
+.footer{
+  margin-top:40px;
+  font-size:12px;
+  color:#666;
 }
 </style>
 
@@ -31,43 +93,81 @@ li{
 
 <body>
 
-<h1>🧠 Welcome to DOBO</h1>
+<div class="container">
 
-<p>
-DOBO helps you understand when your data is being transmitted
-from your browser to external systems — especially when using AI tools.
-</p>
+<!-- HERO -->
+<div class="hero">
 
-<div class="card">
+  <div class="hero-text">
+    <h1>DOBO</h1>
+    <p class="subtitle">
+      See where your data actually goes
+    </p>
 
-<h3>What DOBO Shows</h3>
+    <p>
+      DOBO is a real-time network transparency layer that reveals how your data
+      travels across the web. Every interaction you make—whether browsing a site
+      or using an AI tool—triggers multiple hidden connections to external domains.
+      DOBO uncovers these interactions and presents them in a clear, structured,
+      and actionable way.
+    </p>
+  </div>
 
-<ul>
-<li>🔴 When a website sends network requests</li>
-<li>⚠️ Suspicious tracking or analytics domains</li>
-<li>🧠 ML-based domain risk prediction</li>
-<li>📊 Domain activity dashboard</li>
-</ul>
-
-</div>
-
-<div class="card">
-
-<h3>How to Use</h3>
-
-<ul>
-<li>Open any website</li>
-<li>DOBO will automatically monitor outgoing requests</li>
-<li>View live activity in the floating monitor</li>
-<li>Open the extension popup to see domain statistics</li>
-</ul>
+  <div class="hero-image">
+    <!-- Replace with your local file path if needed -->
+    <img src="screenshot.png" alt="DOBO Live Monitoring UI">
+  </div>
 
 </div>
 
-<p style="margin-top:30px; color:#aaa;">
-This tool provides transparency about network activity,
-but cannot inspect encrypted data contents.
+<!-- WHAT DOBO DOES -->
+<div class="card">
+  <h3>What DOBO Does</h3>
+  <ul>
+    <li>Monitors outbound network requests in real time</li>
+    <li>Identifies all domains triggered during browsing</li>
+    <li>Detects third-party connections beyond the main site</li>
+    <li>Classifies domains using heuristic and ML-based analysis</li>
+    <li>Flags suspicious or high-risk behavior instantly</li>
+    <li>Detects sensitive user inputs such as credentials and API keys</li>
+    <li>Provides a live floating monitor for continuous visibility</li>
+  </ul>
+</div>
+
+<!-- WHY IT MATTERS -->
+<div class="card">
+  <h3>Why It Matters</h3>
+  <p>
+    Modern web platforms rely heavily on third-party services including analytics,
+    advertising networks, CDNs, and cloud infrastructure. As a result, user data
+    is often transmitted across multiple domains without explicit awareness.
+  </p>
+
+  <p>
+    This lack of transparency introduces risks such as tracking, profiling,
+    and unintended exposure of sensitive information. DOBO addresses this
+    by making these hidden connections visible and understandable.
+  </p>
+</div>
+
+<!-- HOW TO USE -->
+<div class="card">
+  <h3>How to Use</h3>
+  <ul>
+    <li>Open any website or AI platform</li>
+    <li>DOBO automatically begins monitoring</li>
+    <li>Observe live domain activity in the floating panel</li>
+    <li>Use the extension popup to analyze categorized traffic</li>
+    <li>Review patterns to understand data flow behavior</li>
+  </ul>
+</div>
+
+<p class="footer">
+DOBO provides visibility into network-level interactions and domain activity.
+It does not access or decrypt private user data beyond observable browser-level requests.
 </p>
+
+</div>
 
 </body>
 </html>
