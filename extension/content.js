@@ -1,4 +1,4 @@
-// ---------------- PANEL SETUP ----------------
+// Injected Panel for each website setup
 const panel = document.createElement("div");
 
 panel.style.position = "fixed";
@@ -17,7 +17,7 @@ panel.style.border = "1px solid #222";
 panel.style.boxShadow = "0 8px 24px rgba(0,0,0,0.6)";
 panel.style.fontFamily = "-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif";
 
-// Header with indicator
+// Panel Header
 panel.innerHTML = `
   <div id="dobo-header" style="
     font-weight:600;
@@ -46,7 +46,6 @@ panel.innerHTML = `
 
 document.body.appendChild(panel);
 
-// ---------------- INPUT TRACKING ----------------
 const indicator = document.getElementById("dobo-indicator");
 
 function detectSensitive(text) {
@@ -63,8 +62,8 @@ function detectSensitive(text) {
 
 function setIndicator(isTyping, isSensitive) {
   if (!isTyping) {
-    indicator.innerHTML = "monitoring";
-    indicator.style.color = "#666";
+    indicator.innerHTML = "Monitoring Requests";
+    indicator.style.color = "#ff0000";
     return;
   }
 
@@ -72,18 +71,18 @@ function setIndicator(isTyping, isSensitive) {
     <span style="
       width:6px;
       height:6px;
-      background:#ffffff;
+      background:#fff700;
       border-radius:50%;
       display:inline-block;
     "></span>
   `;
 
   if (isSensitive) {
-    html += `
+    html = `
       <span style="
         width:6px;
         height:6px;
-        background:#facc15;
+        background:#ff0000;
         border-radius:50%;
         display:inline-block;
       "></span>
@@ -108,28 +107,27 @@ document.addEventListener("input", (e) => {
   }, 2000);
 });
 
-// ---------------- RISK UI ----------------
+
 function getRiskUI(risk) {
   switch (risk) {
     case "HIGH_RISK":
       return { 
-        color: "#c25050",   // pastel red
+        color: "#c25050",
         bg: "rgba(255, 179, 179, 0.08)"
       };
     case "SUSPICIOUS":
       return { 
-        color: "#ffd6a5",   // pastel orange
+        color: "#ffd6a5",
         bg: "rgba(255, 214, 165, 0.08)"
       };
     default:
       return { 
-        color: "#75cba2",   // pastel green
+        color: "#75cba2",
         bg: "rgba(183, 247, 216, 0.08)"
       };
   }
 }
 
-// ---------------- ADD ITEM TO UI ----------------
 function addRequestToUI(data) {
   const item = document.createElement("div");
 
@@ -185,7 +183,6 @@ function addRequestToUI(data) {
   panel.insertBefore(item, panel.children[1]);
 }
 
-// ---------------- MESSAGE LISTENER ----------------
 chrome.runtime.onMessage.addListener((msg) => {
   console.log("📩 UI RECEIVED:", msg);
 

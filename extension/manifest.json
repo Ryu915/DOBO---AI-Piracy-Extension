@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "DOBO - AI Data Transparency",
+  "name": "DOBO - Data Transparency",
   "version": "1.1",
   "permissions": [
     "webRequest",

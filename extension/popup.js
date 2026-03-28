@@ -1,13 +1,15 @@
 const statsDiv = document.getElementById("stats");
 
-// Categorization
 const categoryRules = {
-  AI: ["openai", "anthropic"],
-  TRACKING: ["analytics", "segment"],
-  ADS: ["ads", "doubleclick"],
-  CDN: ["cloudflare", "cdn"],
-  SOCIAL: ["facebook", "twitter"],
-  PAYMENT: ["stripe", "paypal"]
+  AI_SERVICE: ["openai", "anthropic", "huggingface"],
+  TRACKING: ["analytics", "segment", "mixpanel"],
+  AD_NETWORK: ["ads", "doubleclick"],
+  CDN: ["cdn", "cloudflare", "akamai"],
+  SOCIAL_MEDIA: ["facebook", "twitter", "instagram"],
+  STATIC_ASSETS: ["fonts", "gstatic", "cdnjs"],
+  PAYMENT: ["stripe", "paypal"],
+  AUTH_PROVIDER: ["auth", "login", "okta"],
+  CLOUD_INFRA: ["amazonaws", "azure"]
 };
 
 function categorize(domain) {
@@ -65,6 +67,48 @@ function refreshUI() {
   });
 }
 
-refreshUI();
+let allRequests = [];
 
+function displayUI(requests) {
+  statsDiv.innerHTML = "";
+
+  if (requests.length === 0) {
+    statsDiv.innerHTML = `<div class="empty">No activity yet</div>`;
+    return;
+  }
+
+  let map = {};
+  requests.forEach(r => {
+    let cat = categorize(r.domain);
+    map[cat] = (map[cat] || 0) + 1;
+  });
+
+  let title = document.createElement("div");
+  title.className = "section-title";
+  title.innerText = "Activity Overview";
+  statsDiv.appendChild(title);
+
+  Object.entries(map)
+    .sort((a, b) => b[1] - a[1])
+    .forEach(([cat, count]) => {
+      statsDiv.appendChild(createCard(cat, count));
+    });
+}
+
+function refreshUI() {
+  chrome.storage.local.get(["requests"], (data) => {
+    allRequests = data.requests || [];
+    displayUI(allRequests);
+  });
+}
+
+refreshUI();
 chrome.storage.onChanged.addListener(() => refreshUI());
+
+document.getElementById("search").addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase();
+  const filtered = query 
+    ? allRequests.filter(r => r.domain.toLowerCase().includes(query))
+    : allRequests;
+  displayUI(filtered);
+});

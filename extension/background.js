@@ -1,6 +1,5 @@
 let mlCache = {};
 
-// ONBOARDING
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
     chrome.tabs.create({
@@ -56,7 +55,6 @@ function shouldLog(domain) {
   return false;
 }
 
-// RULE BASED
 const suspiciousKeywords = ["track", "ads", "analytics", "pixel"];
 
 function classifyRisk(domain) {
@@ -66,7 +64,6 @@ function classifyRisk(domain) {
   return "NORMAL";
 }
 
-// NEW: DOMAIN CATEGORY
 const categoryRules = {
   AI_SERVICE: ["openai", "anthropic", "huggingface"],
   TRACKING: ["analytics", "segment", "mixpanel"],
@@ -92,46 +89,12 @@ function categorizeDomain(domain) {
 }
 
 function storeRequest(entry) {
-  chrome.storage.local.get(["requests", "domainStats"], (data) => {
+  chrome.storage.local.get(["requests"], (data) => {
     let requests = data.requests || [];
-    let domainStats = data.domainStats || {};
 
     requests.push(entry);
 
-    // -------- BEHAVIOR PROFILING --------
-    if (!domainStats[entry.rootDomain]) {
-      domainStats[entry.rootDomain] = {
-        count: 0,
-        thirdParty: 0,
-        suspicious: 0,
-        domains: {}
-      };
-    }
-
-    domainStats[entry.rootDomain].count++;
-
-    if (entry.status === "THIRD_PARTY") {
-      domainStats[entry.rootDomain].thirdParty++;
-    }
-
-    if (entry.risk === "SUSPICIOUS") {
-      domainStats[entry.rootDomain].suspicious++;
-    }
-
-    domainStats[entry.rootDomain].domains[entry.domain] = true;
-
-    // -------- ENDPOINT FREQUENCY --------
-    if (!domainStats.endpoints) {
-      domainStats.endpoints = {};
-    }
-
-    if (!domainStats.endpoints[entry.domain]) {
-      domainStats.endpoints[entry.domain] = 0;
-    }
-
-    domainStats.endpoints[entry.domain]++;
-
-    chrome.storage.local.set({ requests, domainStats });
+    chrome.storage.local.set({ requests });
   });
 }
 

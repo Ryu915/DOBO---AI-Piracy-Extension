@@ -55,9 +55,6 @@ data = [
     ("static.cloudflare.com", 0),
     ("images.unsplash.com", 0),
 
-<<<<<<< HEAD
-    # SUSPICIOUS
-=======
     # NEW SAFE
     ("netflix.com", 0),
     ("linkedin.com", 0),
@@ -99,7 +96,6 @@ data = [
     ("chat.openai.com", 0),
 
     # SUSPICIOUS (tracking / ads / analytics)
->>>>>>> 536cb67 (increased accuracy)
     ("pixel.onaudience.com", 1),
     ("ads.doubleclick.net", 1),
     ("track.segment.io", 1),
@@ -107,8 +103,6 @@ data = [
     ("tracking.facebook.com", 1),
     ("metrics.apple.com", 1),
     ("adservice.google.com", 1),
-<<<<<<< HEAD
-=======
     ("stats.g.doubleclick.net", 1),
     ("ad.doubleclick.net", 1),
     ("pagead2.googlesyndication.com", 1),
@@ -176,7 +170,6 @@ data = [
     ("track.smaato.net", 1),
     ("ads.inmobi.com", 1),
     ("track.inmobi.com", 1),
->>>>>>> 536cb67 (increased accuracy)
 ]
 
 # BUILD FEATURE MATRIX
