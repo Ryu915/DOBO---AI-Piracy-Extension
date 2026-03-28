@@ -23,22 +23,24 @@ known_bad_domains = [
 ]
 
 # FEATURE FUNCTION
-def extract_features(domain, freq=1, is_third_party=1):
-    length = len(domain)
-
+def extract_features(domain):
     keyword_flag = int(any(k in domain for k in keywords))
 
-    subdomain_count = max(len(domain.split(".")) - 2, 0)
 
     known_flag = int(any(k in domain for k in known_bad_domains))
 
+    suspicious_tlds = ["xyz", "top", "club", "ru", "cn", "tk"]
+    tld = domain.split('.')[-1]
+
     return [
-        length,
+        len(domain),        #domain length
         keyword_flag,
-        subdomain_count,
-        freq,
-        is_third_party,
-        known_flag
+        domain.count('.'), #subdomain count
+        int('-' in domain),
+        int(any(char.isdigit() for char in domain)),
+        int(domain.startswith("ads") or domain.startswith("track")),
+        known_flag,
+        int(tld in suspicious_tlds)
     ]
 
 # DATASET (expand this later!)
@@ -53,7 +55,51 @@ data = [
     ("static.cloudflare.com", 0),
     ("images.unsplash.com", 0),
 
+<<<<<<< HEAD
     # SUSPICIOUS
+=======
+    # NEW SAFE
+    ("netflix.com", 0),
+    ("linkedin.com", 0),
+    ("instagram.com", 0),
+    ("whatsapp.com", 0),
+    ("zoom.us", 0),
+    ("dropbox.com", 0),
+    ("slack.com", 0),
+    ("notion.so", 0),
+    ("figma.com", 0),
+    ("canva.com", 0),
+    ("airbnb.com", 0),
+    ("uber.com", 0),
+    ("ola.com", 0),
+    ("flipkart.com", 0),
+    ("zomato.com", 0),
+    ("swiggy.com", 0),
+    ("paytm.com", 0),
+    ("razorpay.com", 0),
+    ("coursera.org", 0),
+    ("udemy.com", 0),
+    ("khanacademy.org", 0),
+    ("nasa.gov", 0),
+    ("mit.edu", 0),
+    ("harvard.edu", 0),
+    ("stanford.edu", 0),
+    ("cloudflare.com", 0),
+    ("fastly.com", 0),
+    ("akamai.com", 0),
+    ("jsdelivr.net", 0),
+    ("bootstrapcdn.com", 0),
+    ("api.stripe.com", 0),
+    ("api.paypal.com", 0),
+    ("docs.aws.amazon.com", 0),
+    ("console.firebase.google.com", 0),
+    ("developer.apple.com", 0),
+    ("support.microsoft.com", 0),
+    ("learn.microsoft.com", 0),
+    ("chat.openai.com", 0),
+
+    # SUSPICIOUS (tracking / ads / analytics)
+>>>>>>> 536cb67 (increased accuracy)
     ("pixel.onaudience.com", 1),
     ("ads.doubleclick.net", 1),
     ("track.segment.io", 1),
@@ -61,6 +107,76 @@ data = [
     ("tracking.facebook.com", 1),
     ("metrics.apple.com", 1),
     ("adservice.google.com", 1),
+<<<<<<< HEAD
+=======
+    ("stats.g.doubleclick.net", 1),
+    ("ad.doubleclick.net", 1),
+    ("pagead2.googlesyndication.com", 1),
+    ("googleads.g.doubleclick.net", 1),
+    ("ads.yahoo.com", 1),
+    ("analytics.twitter.com", 1),
+    ("track.mailchimp.com", 1),
+    ("links.mailchimp.com", 1),
+    ("clicks.hubspot.com", 1),
+    ("track.hubspot.com", 1),
+    ("pixel.facebook.com", 1),
+    ("connect.facebook.net", 1),
+    ("ads.linkedin.com", 1),
+    ("px.ads.linkedin.com", 1),
+    ("tracking.snapchat.com", 1),
+    ("ads.snapchat.com", 1),
+    ("insights.hotjar.com", 1),
+    ("script.hotjar.com", 1),
+    ("bam.nr-data.net", 1),
+    ("js-agent.newrelic.com", 1),
+    ("logx.optimizely.com", 1),
+    ("events.mixpanel.com", 1),
+    ("api.mixpanel.com", 1),
+    ("trk.pinterest.com", 1),
+    ("ads.pinterest.com", 1),
+
+    # NEW SUSPICIOUS
+    ("ads.reddit.com", 1),
+    ("pixel.reddit.com", 1),
+    ("ads.tiktok.com", 1),
+    ("analytics.tiktok.com", 1),
+    ("tracking.spotify.com", 1),
+    ("ads.spotify.com", 1),
+    ("ads.amazon.com", 1),
+    ("analytics.amazon.com", 1),
+    ("track.adform.net", 1),
+    ("serve.adform.net", 1),
+    ("ads.taboola.com", 1),
+    ("trc.taboola.com", 1),
+    ("ads.outbrain.com", 1),
+    ("tr.outbrain.com", 1),
+    ("pixel.quantserve.com", 1),
+    ("edge.quantserve.com", 1),
+    ("ads.pubmatic.com", 1),
+    ("track.pubmatic.com", 1),
+    ("ads.rubiconproject.com", 1),
+    ("pixel.rubiconproject.com", 1),
+    ("ads.criteo.com", 1),
+    ("bidder.criteo.com", 1),
+    ("ads.adroll.com", 1),
+    ("track.adroll.com", 1),
+    ("ads.moatads.com", 1),
+    ("analytics.moatads.com", 1),
+    ("ads.openx.net", 1),
+    ("track.openx.net", 1),
+    ("ads.smartadserver.com", 1),
+    ("track.smartadserver.com", 1),
+    ("ads.revcontent.com", 1),
+    ("tr.revcontent.com", 1),
+    ("ads.adnxs.com", 1),
+    ("ib.adnxs.com", 1),
+    ("ads.yieldmo.com", 1),
+    ("track.yieldmo.com", 1),
+    ("ads.smaato.net", 1),
+    ("track.smaato.net", 1),
+    ("ads.inmobi.com", 1),
+    ("track.inmobi.com", 1),
+>>>>>>> 536cb67 (increased accuracy)
 ]
 
 # BUILD FEATURE MATRIX
