@@ -113,7 +113,7 @@ function getRiskUI(risk) {
   switch (risk) {
     case "HIGH_RISK":
       return { 
-        color: "#ffb3b3",   // pastel red
+        color: "#c25050",   // pastel red
         bg: "rgba(255, 179, 179, 0.08)"
       };
     case "SUSPICIOUS":
@@ -123,7 +123,7 @@ function getRiskUI(risk) {
       };
     default:
       return { 
-        color: "#b7f7d8",   // pastel green
+        color: "#75cba2",   // pastel green
         bg: "rgba(183, 247, 216, 0.08)"
       };
   }
