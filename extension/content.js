@@ -166,7 +166,7 @@ function addRequestToUI(data) {
     ">
       ${data.risk || "UNKNOWN"}
       ${
-        data.confidence
+        data.confidence !== null && data.confidence !== undefined
           ? `<span style="color:#555;"> (${data.confidence.toFixed(2)})</span>`
           : ""
       }
@@ -190,7 +190,7 @@ chrome.runtime.onMessage.addListener((msg) => {
     addRequestToUI(msg.payload);
 
     if (msg.payload.risk === "HIGH_RISK") {
-      console.warn("🚨 HIGH RISK DETECTED:", msg.payload.domain);
+      console.warn(" HIGH RISK DETECTED:", msg.payload.domain);
     }
   }
 });

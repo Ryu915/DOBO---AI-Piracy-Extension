@@ -11,7 +11,6 @@ from sklearn.metrics import (
     roc_auc_score
 )
 
-# CONFIG
 keywords = ["ads", "track", "analytics", "pixel"]
 
 known_bad_domains = [
@@ -73,7 +72,7 @@ data = [
     ("apple.com", 0),
     ("support.apple.com", 0),
 
-    # NEW SAFE
+    #  SAFE
     ("netflix.com", 0),
     ("linkedin.com", 0),
     ("instagram.com", 0),
@@ -113,7 +112,7 @@ data = [
     ("learn.microsoft.com", 0),
     ("chat.openai.com", 0),
 
-    # SUSPICIOUS (tracking / ads / analytics)
+    # SUSPICIOUS 
     ("pixel.onaudience.com", 1),
     ("ads.doubleclick.net", 1),
     ("track.segment.io", 1),
@@ -147,7 +146,7 @@ data = [
     ("trk.pinterest.com", 1),
     ("ads.pinterest.com", 1),
 
-    # NEW SUSPICIOUS
+    # SUSPICIOUS
     ("ads.reddit.com", 1),
     ("pixel.reddit.com", 1),
     ("ads.tiktok.com", 1),
@@ -190,7 +189,7 @@ data = [
     ("track.inmobi.com", 1),
 ]
 
-# BUILD FEATURE MATRIX
+
 X = []
 y = []
 
@@ -202,24 +201,19 @@ for domain, label in data:
 X = np.array(X)
 y = np.array(y)
 
-# SCALE FEATURES
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-# TRAIN / TEST SPLIT
 X_train, X_test, y_train, y_test = train_test_split(
     X_scaled, y, test_size=0.3, random_state=42
 )
 
-# TRAIN MODEL
 model = LogisticRegression()
 model.fit(X_train, y_train)
 
-# PREDICT
 y_pred = model.predict(X_test)
 y_prob = model.predict_proba(X_test)[:, 1]
 
-# EVALUATION
 print("\n======================")
 print("MODEL EVALUATION")
 print("======================\n")
@@ -234,16 +228,14 @@ print(classification_report(y_test, y_pred))
 
 print("\nROC-AUC Score:", roc_auc_score(y_test, y_prob))
 
-# FEATURE IMPORTANCE
 print("\nFeature Weights:")
 print("[length, keyword, subdomain, freq, third_party, known]")
 print(model.coef_)
 
-# SAVE MODEL + SCALER
 with open("model.pkl", "wb") as f:
     pickle.dump(model, f)
 
 with open("scaler.pkl", "wb") as f:
     pickle.dump(scaler, f)
 
-print("\n✅ Model and scaler saved!")
+print("\n Model and scaler saved!")

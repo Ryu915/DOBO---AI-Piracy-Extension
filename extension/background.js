@@ -133,12 +133,17 @@ chrome.webRequest.onBeforeRequest.addListener(
       mlCache[requestRoot] = mlResult;
     }
 
+    let confidence = mlResult?.confidence;
+    if (confidence === null || confidence === undefined) {
+      confidence = risk === "SUSPICIOUS" ? 0.0 : risk === "HIGH_RISK" ? 0.8 : 0.2;
+    }
+    
     const entry = {
       domain: requestDomain,
       rootDomain: requestRoot,
       status,
       risk,
-      category: categorizeDomain(requestDomain), // NEW
+      category: categorizeDomain(requestDomain),
       mlRisk: mlResult?.suspicious ? "ML_SUSPICIOUS" : "ML_NORMAL",
       confidence: mlResult?.confidence || null,
       time: new Date().toLocaleTimeString()
